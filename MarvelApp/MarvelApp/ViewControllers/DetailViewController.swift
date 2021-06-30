@@ -18,6 +18,7 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
     var detailCell: MCell = MCell(xibName: "PortadasCell", idReuse: "PortadasCell")
     var seriesCell: MCell = MCell(xibName: "SeriesCell", idReuse: "SerieCell")
     var eventCell: MCell = MCell(xibName: "EventsCell", idReuse: "EventsCell")
+    var noDataCell: MCell = MCell(xibName: "NoDataCell", idReuse: "NoDataCell")
     
     @IBOutlet weak var detailName: UILabel!
     @IBOutlet weak var detailImage: UIImageView!
@@ -34,10 +35,11 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        registerEvents()
+        
         registerComics()
         registerSeries()
-        
+        registerEvents()
+    
         initData(data: detailHero)
         comicSetup()
         
@@ -49,8 +51,7 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
     func comicSetup(){
         
         guard let secureId = detailHero.id else{return}
-        print("hola \(secureId)")
-        
+                
         client.getComics(characterId: secureId){result in
             switch result {
             case .success(let comicos):
@@ -75,7 +76,6 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
                 
                 self.allSeries.append(contentsOf: secureSeries)
                 self.series.reloadData()
-                print("hola event2 \(self.allSeries)")
                 
             case .failure(let error):
                 // Mostrar una alerta al usuario con el errorDescription
@@ -91,7 +91,6 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
                 
                 self.allEvents.append(contentsOf: secureEventos)
                 self.eventos.reloadData()
-                print("hola event2 \(self.allEvents)")
                 
             case .failure(let error):
                 // Mostrar una alerta al usuario con el errorDescription
@@ -107,8 +106,8 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
          let layout = UICollectionViewFlowLayout()
            layout.scrollDirection = .horizontal
            layout.minimumLineSpacing = 8
-           layout.minimumInteritemSpacing = 0
-           layout.estimatedItemSize = CGSize(width: 200, height: 250)
+           layout.minimumInteritemSpacing = 4
+           layout.estimatedItemSize = CGSize(width: 150, height: 250)
            
        
            portadas.setCollectionViewLayout(layout, animated: true)
@@ -120,7 +119,7 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
          let layout = UICollectionViewFlowLayout()
            layout.scrollDirection = .horizontal
            layout.minimumLineSpacing = 8
-           layout.minimumInteritemSpacing = 0
+           layout.minimumInteritemSpacing = 4
            layout.estimatedItemSize = CGSize(width: 250, height: 250)
            
        
@@ -134,8 +133,8 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
          let layout = UICollectionViewFlowLayout()
            layout.scrollDirection = .horizontal
            layout.minimumLineSpacing = 8
-           layout.minimumInteritemSpacing = 0
-           layout.estimatedItemSize = CGSize(width: 250, height: 250)
+           layout.minimumInteritemSpacing = 4
+           layout.estimatedItemSize = CGSize(width: 240, height: 240)
            
        
         eventos.setCollectionViewLayout(layout, animated: true)
@@ -143,17 +142,34 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
         
     }
     
+    func registerNoData() {
+        
+         let layout = UICollectionViewFlowLayout()
+           layout.scrollDirection = .horizontal
+           layout.minimumLineSpacing = 8
+           layout.minimumInteritemSpacing = 4
+           layout.estimatedItemSize = CGSize(width: 240, height: 240)
+           
+       
+        eventos.setCollectionViewLayout(layout, animated: true)
+        eventos.register(UINib(nibName: noDataCell.xibName, bundle: nil), forCellWithReuseIdentifier: noDataCell.idReuse)
+        
+    }
+    
     // MARK: - CARGANDO DATOS BASE
     
-   func initData (data: CharacterResult){
+    func initData (data: CharacterResult){
         detailName.text = data.name
         detailDescription.text = data.description
         
         let httpImage = data.thumbnail?.path
         guard let securehttp = httpImage else{return}
         
+        let ext = data.thumbnail?.thumbExtension
+        guard let secureExt = ext else{return}
+        
         let https = "https" + securehttp.dropFirst(4)
-        let url = URL(string: "\(https).jpg")
+        let url = URL(string: "\(https).\(secureExt)")
         
         detailImage.kf.setImage(with: url)
         
@@ -165,15 +181,21 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if collectionView == portadas {
-            
+            if allComics.count == 0 {
+                return 1
+            }
             return allComics.count
         }
         if collectionView == series {
-            print(" hola serie \(allSeries.count)")
+            if allSeries.count == 0 {
+                return 1
+            }
             return allSeries.count
         }
         if collectionView == eventos {
-            print(" hola evento \(allEvents.count)")
+            if allEvents.count == 0 {
+                return 1
+            }
             return allEvents.count
         }
        return 0
@@ -183,6 +205,9 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
        
         if collectionView == portadas {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: detailCell.idReuse, for: indexPath) as! PortadasCell
+            if allComics.count == 0 {
+                return cell
+            }
                 
                 cell.setPortada(data: allComics[indexPath.row])
                 
@@ -192,14 +217,19 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
         if collectionView == series {
             let cell2 = collectionView.dequeueReusableCell(withReuseIdentifier: seriesCell.idReuse, for: indexPath) as! SeriesCell
             
-         //   if let secureEvent = allEvents[indexPath.row] {return}
+            if allSeries.count == 0 {
+                return cell2
+            }
             
             cell2.setSeries(data: allSeries[indexPath.row])
                 
                 return cell2
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: eventCell.idReuse, for: indexPath) as! EventsCell
-                
+            if allEvents.count == 0 {
+                return cell
+            }
+            
             cell.setEvento(data: allEvents[indexPath.row])
                 
                 return cell

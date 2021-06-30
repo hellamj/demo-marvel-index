@@ -28,6 +28,8 @@ class PortadasCell: UICollectionViewCell {
         
         //print("\(url)")
         imagePortada.kf.setImage(with: url)
+        
+        
     }
     
     

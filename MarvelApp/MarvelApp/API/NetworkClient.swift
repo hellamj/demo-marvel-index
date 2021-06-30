@@ -3,8 +3,7 @@ import Alamofire
 
 class NetworkClient {
     
-    private let publicKey = "6fa152d54f7b81ea0bcfec2885409a0c"
-    private let privateKey = "bebd82125fb159e1d35f132dfc096577d9e1380e"
+    
     private let baseUrl = "https://gateway.marvel.com"
     private let charactersPath = "/v1/public/characters"
     
@@ -28,7 +27,7 @@ class NetworkClient {
                 "apikey": publicKey,
                 "hash": hash,
                 "ts": timestamp,
-                "limit": 10,
+                "limit": 20,
                 "offset": offset
             ]
         ).validate(statusCode: 200 ..< 299).responseJSON { serverResponse in
@@ -109,7 +108,6 @@ class NetworkClient {
                 
                 let json = try JSONDecoder().decode(EventResponse.self, from: secureData)
                 completion(.success(json))
-                print("hola event \(json)")
             } catch {
                 
                 completion(.failure(.serializationError("Error: \(error.localizedDescription)")))

@@ -16,7 +16,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="292" height="349"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="album" translatesAutoresizingMaskIntoConstraints="NO" id="zVA-Ym-ZtT">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no event" translatesAutoresizingMaskIntoConstraints="NO" id="zVA-Ym-ZtT">
                         <rect key="frame" x="26" y="54.5" width="240" height="240"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="240" id="iVC-fK-diz"/>
@@ -38,6 +38,6 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="album" width="236" height="236"/>
+        <image name="no event" width="266" height="200"/>
     </resources>
 </document>

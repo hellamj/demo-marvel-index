@@ -27,6 +27,8 @@ class SeriesCell: UICollectionViewCell {
         
         //print("\(url)")
         imageSeries.kf.setImage(with: url)
+        
+        
     }
 
 }

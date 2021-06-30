@@ -27,6 +27,8 @@ class EventsCell: UICollectionViewCell {
         
         //print("\(url)")
         imageEvent.kf.setImage(with: url)
+        
+        
     }
 
 }

@@ -7,7 +7,12 @@
 
 import UIKit
 
-class ComicsTV: UITableViewController {
+class ComicsTV: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
+    
+    let searchController = UISearchController()
+    var resultsController = UITableViewController()
+    
+    var searchResults: [CharacterResult]? = []
     
     var isLoading = false
     var misCells: MCell = MCell(xibName: "HeroCell", idReuse: "HeroCell")
@@ -19,6 +24,8 @@ class ComicsTV: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.searchController = searchController
+        searchController.searchResultsUpdater = self
         
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 38, height: 38))
         imageView.contentMode = .scaleAspectFit
@@ -35,13 +42,21 @@ class ComicsTV: UITableViewController {
         self.tableView?.register(UINib(nibName: misCells.xibName, bundle: nil), forCellReuseIdentifier: misCells.idReuse)
     }
     
+    // MARK: - SEARCH CONTROLLER
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text else {
+            return
+        }
+        print(text)
+    }
+    
     // MARK: - Network Setup (CARGANDO LOS PERSONAJES)
     
     func networkSetup(){
         client.getCharacters(offset: offset){result in
             switch result {
             case .success(let characters):
-                print(characters.data?.results?.first as Any)
                 guard let secureChar = characters.data?.results else{
                     return
                 }
@@ -94,7 +109,6 @@ class ComicsTV: UITableViewController {
         //let cell = tableView.dequeueReusableCell(withIdentifier: misCells.idReuse, for: indexPath) as! HeroCell
         if indexPath.section == 0 {
         currentPosition = indexPath.row
-        print("hola soy tu amiga cell")
             performSegue(withIdentifier: "segueComic", sender: self)
             
         }
@@ -139,7 +153,6 @@ class ComicsTV: UITableViewController {
         if segue.identifier == "segueComic" {
             guard let destino = segue.destination as? DetailViewController else {return}
             destino.detailHero = heroes[currentPosition]
-            print("Hola que tal")
         }
     }
     

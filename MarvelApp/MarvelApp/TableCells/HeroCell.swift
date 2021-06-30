@@ -37,6 +37,7 @@ class HeroCell: UITableViewCell {
         let url = URL(string: "\(https).\(secureExt)")
         
         heroImage.kf.setImage(with: url)
+        heroImage.layer.cornerRadius = 8
         
         //print("aaa \(https)")
         
