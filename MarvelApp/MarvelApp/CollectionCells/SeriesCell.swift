@@ -1,22 +1,21 @@
 //
-//  PortadasCell.swift
+//  SeriesCell.swift
 //  MarvelApp
 //
-//  Created by admin on 6/24/21.
+//  Created by admin on 6/29/21.
 //
 
 import UIKit
 
-class PortadasCell: UICollectionViewCell {
-    
-    @IBOutlet weak var imagePortada: UIImageView!
+class SeriesCell: UICollectionViewCell {
+
+    @IBOutlet weak var imageSeries: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code}
+        // Initialization code
     }
-    
-    func setPortada(data: ComicResult){
+    func setSeries(data: SeriesResult){
         
         let httpImage = data.thumbnail?.path
         guard let securehttp = httpImage else{return}
@@ -27,8 +26,7 @@ class PortadasCell: UICollectionViewCell {
         let url = URL(string: "\(https).\(secureExt)")
         
         //print("\(url)")
-        imagePortada.kf.setImage(with: url)
+        imageSeries.kf.setImage(with: url)
     }
-    
-    
+
 }

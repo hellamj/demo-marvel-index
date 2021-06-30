@@ -26,13 +26,15 @@ class HeroCell: UITableViewCell {
     }
     func initData (data: CharacterResult){
         heroName.text = data.name
-        heroDescription.text = data.description
+        heroDescription.text = data.description  == "" ? "Not description found" : data.description
         
         let httpImage = data.thumbnail?.path
         guard let securehttp = httpImage else{return}
+        let ext = data.thumbnail?.thumbExtension
+        guard let secureExt = ext else{return}
         
         let https = "https" + securehttp.dropFirst(4)
-        let url = URL(string: "\(https).jpg")
+        let url = URL(string: "\(https).\(secureExt)")
         
         heroImage.kf.setImage(with: url)
         

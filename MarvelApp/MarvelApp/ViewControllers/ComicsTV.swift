@@ -28,12 +28,14 @@ class ComicsTV: UITableViewController {
         
         networkSetup()
         
+        
         let tableViewLoadingCellNib = UINib(nibName: loadCell.xibName, bundle: nil)
         self.tableView.register(tableViewLoadingCellNib, forCellReuseIdentifier: loadCell.idReuse)
         
         self.tableView?.register(UINib(nibName: misCells.xibName, bundle: nil), forCellReuseIdentifier: misCells.idReuse)
     }
     
+    // MARK: - Network Setup (CARGANDO LOS PERSONAJES)
     
     func networkSetup(){
         client.getCharacters(offset: offset){result in
@@ -56,7 +58,8 @@ class ComicsTV: UITableViewController {
         }
     }
     
-    // MARK: - Tableview data source
+    
+    // MARK: - TABLEVIEW
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
@@ -89,10 +92,15 @@ class ComicsTV: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //let cell = tableView.dequeueReusableCell(withIdentifier: misCells.idReuse, for: indexPath) as! HeroCell
+        if indexPath.section == 0 {
         currentPosition = indexPath.row
         print("hola soy tu amiga cell")
-        performSegue(withIdentifier: "segueComic", sender: self)
+            performSegue(withIdentifier: "segueComic", sender: self)
+            
+        }
     }
+    
+    // MARK: - SETTINGS SCROLL INFINITO
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -105,6 +113,7 @@ class ComicsTV: UITableViewController {
             return 55 //Loading Cell height
         }
     }
+    
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
@@ -122,6 +131,9 @@ class ComicsTV: UITableViewController {
             
         }
     }
+    
+    // MARK: - PREPARE FOR SEGUE
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "segueComic" {
@@ -133,6 +145,4 @@ class ComicsTV: UITableViewController {
     
 }
 
-/*self.tableView.reloadData()
- self.isLoading = false
- */
+
