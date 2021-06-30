@@ -3,7 +3,7 @@ import Alamofire
 
 class NetworkClient {
     
-    
+   
     private let baseUrl = "https://gateway.marvel.com"
     private let charactersPath = "/v1/public/characters"
     

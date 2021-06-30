@@ -7,12 +7,9 @@
 
 import UIKit
 
-class ComicsTV: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
+class ComicsTV: UITableViewController, UISearchResultsUpdating {
     
     let searchController = UISearchController()
-    var resultsController = UITableViewController()
-    
-    var searchResults: [CharacterResult]? = []
     
     var isLoading = false
     var misCells: MCell = MCell(xibName: "HeroCell", idReuse: "HeroCell")
